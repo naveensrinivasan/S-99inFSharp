@@ -6,7 +6,7 @@ let last l = List.fold (fun acc ele -> ele::acc) [] l
              |>  List.head
 last data 
 
-//P02 (*) Find the last but one element of a list.
+//P02  Find the last but one element of a list.
 let lastButOne l = List.fold (fun acc ele -> ele:: acc) [] l 
                 |> List.tail 
                 |> List.head
