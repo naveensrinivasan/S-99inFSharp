@@ -6,28 +6,28 @@ let last l = List.fold (fun acc ele -> ele::acc) [] l
              |>  List.head
 last data 
 
-//P02 (*) Find the last but one element of a list.
+//P02  Find the last but one element of a list.
 let lastButOne l = List.fold (fun acc ele -> ele:: acc) [] l 
                 |> List.tail 
                 |> List.head
 lastButOne data
  
-//P03 (*) Find the Kth element of a list.
+//P03  Find the Kth element of a list.
 let kth l n = l |> Seq.take n 
                 |> Seq.skip (n-1)
                 |> Seq.head
 kth data 8
               
-//P04 (*) Find the number of elements of a list.
+//P04  Find the number of elements of a list.
 let count l = l |> List.map(fun i -> 1)
                 |> List.sum
 count data
 
-//P05 (*) Reverse a list.
+//P05  Reverse a list.
 let rev l = List.fold (fun acc ele -> ele::acc) [] l
 rev data
 
-//P06 (*) Find out whether a list is a palindrome.
+//P06  Find out whether a list is a palindrome.
 let isPalindrome d =
     let (dataarr,len ) = d.ToString().ToCharArray() , d.ToString().Length /2
     let (first, second) = ( dataarr|> Seq.take(len) , dataarr |> Array.rev |> Seq.take(len))
@@ -57,47 +57,47 @@ let packDups l =
 
 packDups data1           
 
-//P10 (*) Run-length encoding of a list.
+//P10  Run-length encoding of a list.
 let encode l = packDups l |> List.collect (fun x ->[(List.length x, List.head x)]) 
 encode data1
 
-//P11 (*) Modified run-length encoding.
+//P11  Modified run-length encoding.
 let modEncode l = encode l |> List.map(fun x-> if fst x = 1 then box(snd x) else box [for i in 1..fst x -> snd x ])
 modEncode data1
 
-//P12 (*) Decode a run-length encodedlist 
+//P12  Decode a run-length encodedlist 
 let decode l = encode l |> List.collect(fun x -> [for i in 1 .. fst x -> snd x])
 decode data1
 
-//p14 (*) duplicate elements in the list
+//p14  duplicate elements in the list
 let duplicate l = l |> List.collect(fun x -> [x;x])
 duplicate [1..10]
 
-//P15 (*) Duplicate elements by a given number of times
+//P15  Duplicate elements by a given number of times
 let duplicateN n l = l |> List.collect(fun x -> [for i in 1..n -> x])
 duplicateN 3 [1..5]
 
-//P16 (*) Drop every  Nth element from a list
+//P16  Drop every  Nth element from a list
 let dropeverynth n l = l |> List.mapi (fun i x -> if (i % n) <> 0 then [x] else [])  
                        |> List.collect(fun x -> x)
 dropeverynth 3 [0..30]
 
-//P17 (*) Split a list into two parts
+//P17  Split a list into two parts
 let split n l = (l|> Seq.take(n) |> Seq.toList,l |> Seq.skip(n) |> Seq.toList) 
 split 3 [0..10]
 
-//P18 (*) Split a list into two parts
+//P18  Split a list into two parts
 let slice a b l = l |> Seq.take(b) |> Seq.skip(a) |> Seq.toList 
 slice 3 7 [1..10]
 
-//P19 (*) Rotate N places
+//P19  Rotate N places
 let rotate n l =  if n > -1 then (l |>Seq.skip(n) |> Seq.toList) @ (l |>Seq.take(n) |> Seq.toList)
                         else (l |> List.rev |> Seq.take(-n) |> Seq.toList) @ (l |> Seq.take( (l |> Seq.length) + n ) |> Seq.toList)
  
 rotate -2 [1..10]
 rotate 2 [1..10]
 
-// P20 (*) Remove Kth element from the list
+// P20  Remove Kth element from the list
 let removenth n l = 
     let (h,t) = split n l 
     (h|>Seq.take (n-1) |> Seq.toList) @ t
