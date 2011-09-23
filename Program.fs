@@ -20,7 +20,7 @@ kth data 8
               
 //P04 (*) Find the number of elements of a list.
 let count l = l |> List.map(fun i -> 1)
-                |> List.fold (+) 0
+                |> List.sum
 count data
 
 //P05 (*) Reverse a list.
@@ -36,20 +36,25 @@ let result = isPalindrome  12218
 
  //P07 Flatten a nested list structure
 let (x:List<Object>) = ["a";"a";1;[box 1;box "p"]]
-List.foldBack (fun x acc ->  if x.GetType() = typeof<List<Object>> then (box x :?> List<Object>) @ acc else x::acc) x []
+List.foldBack (fun x acc ->  if (box x :? List<Object>) then (box x :?> List<Object>) @ acc else x::acc) x []
 
 //P08 :- Eliminate consecutive duplicates of list elements.
 let data1 = [1;1;2;2;1;1;3;3;4] 
 List.foldBack(fun x (acc:List<int>) -> if (acc.IsEmpty || acc.Head <> x)  then x::acc else acc) data []
 
-//P09 (**) Pack consecutive duplicates of list elements into sublists.
-let packDups l =
-    let rec removedups listitem mainlist filteredlist innerlist=
-            match mainlist with
-            |head::tail when head = listitem -> removedups listitem tail (listitem::filteredlist) innerlist
-            |head::tail -> removedups head tail [head]  (filteredlist::innerlist)
-            |[] -> filteredlist::innerlist |> List.rev
-    removedups (List.head l) l [] []
+//P09  Pack consecutive duplicates of list elements into sublists.
+// https://sites.google.com/site/prologsite/prolog-problems/1
+let packDups l = 
+       let result =  List.foldBack (
+                            fun ele (flist,(mainlist:List<List<_>>)) -> 
+                                    match (flist,mainlist) with
+                                    |([],_)   ->  (ele::flist,mainlist) 
+                                    |(h::_,_) when ele = h -> ((ele::flist),mainlist)
+                                    |(_::_,s) when s.Head = List.empty  -> ([ele], [flist])
+                                    |(_::_,_) -> ([ele],flist::mainlist)
+                                    ) l ([], [[]] )  
+       fst(result)::snd(result)   
+
 packDups data1           
 
 //P10 (*) Run-length encoding of a list.
